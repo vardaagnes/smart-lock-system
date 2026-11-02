@@ -1,0 +1,35 @@
+server:
+  port: 8082  # 权限服务端口，不和网关冲突
+
+spring:
+  # 数据库配置
+  datasource:
+    url: jdbc:postgresql://localhost:5432/multifactor_auth
+    username: postgres
+    password: 123456  # 改成你自己的数据库密码
+    driver-class-name: org.postgresql.Driver
+
+  # JPA配置
+  jpa:
+    hibernate:
+      ddl-auto: update  # 先改成update，让它自动创建表，后面再改回none
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+
+  # Keycloak配置（已更新为实际地址）
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: http://localhost:8080/realms/multifactor
+          jwk-set-uri: ${spring.security.oauth2.resourceserver.jwt.issuer-uri}/protocol/openid-connect/certs
+
+# 访客票签发
+ticket:
+  # 云侧签名私钥 SK_c（PKCS#8 PEM）。**只生成一次**：对应公钥 PK_c 预装在门锁上，
+  # 换了私钥，所有锁都得重新预装。生成用 demo.KeyGen 跑一次。
+  # 留空、或文件不存在时，票据的 sig_c 回落到 PLACEHOLDER_SIG（锁端验不过，仅用于开发期跑通链路）。
+  sk-c-path: secrets/sk_c.pem

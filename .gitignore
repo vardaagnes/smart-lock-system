@@ -205,3 +205,15 @@ cython_debug/
 marimo/_static/
 marimo/_lsp/
 __marimo__/
+
+# ==== 本项目：密钥与凭据一律不入库（11-02 组长加）====
+secrets/
+*.pem
+*.key
+*.p12
+*.jks
+*.keystore
+realm*.json
+.env.local
+application-local.yml
+
